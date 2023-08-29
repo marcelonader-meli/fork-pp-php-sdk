@@ -1,0 +1,30 @@
+name: publish-release
+
+on:
+  push:
+    branches: [ feature/PPCO-2470 ]
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install-jq
+        run: sudo apt update && sudo apt install jq -y
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+          tools: composer, cs2pr
+
+      - name: publish-tag-release
+        env:
+          SSH_SDK_DEPLOY_KEY: ${{ secrets.SSH_SDK_DEPLOY_KEY_TEST }}
+          GIT_USER_NAME: 'marcelonader-meli'
+          GIT_USER_EMAIL: 'marcelo.nader@mercadolivre.com'
+          DESTINATION_REPOSITORY_USERNAME: 'mnader_meli'
+          DESTINATION_REPOSITORY_NAME: 'fury_pp-php-sdk'
+        run: bin/publish-tag-release.sh

@@ -22,7 +22,7 @@ jobs:
 
       - name: publish-tag-release
         env:
-          SSH_SDK_DEPLOY_KEY: ${{ secrets.SSH_SDK_DEPLOY_KEY_TEST }}
+          SSH_SDK_DEPLOY_KEY_TEST: ${{ secrets.SSH_SDK_DEPLOY_KEY_TEST }}
           GIT_USER_NAME: 'marcelonader-meli'
           GIT_USER_EMAIL: 'marcelo.nader@mercadolivre.com'
           DESTINATION_REPOSITORY_USERNAME: 'mnader_meli'

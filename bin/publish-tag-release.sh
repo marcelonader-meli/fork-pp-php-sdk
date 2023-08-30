@@ -49,15 +49,6 @@ ls -la "$CLONE_DIR"
 echo "[+] List contents of $SOURCE_DIRECTORY"
 ls "$SOURCE_DIRECTORY"
 
-TAG_VERSION=$(cat composer.json | jq -r '.version')
-TARGET_BRANCH="release/$TAG_VERSION"
-
-echo "[+] git tag:"
-git tag "v$TAG_VERSION" master
-
-echo "[+] git push origin v$TAG_VERSION:"
-git push origin "v$TAG_VERSION"
-
 cd "$CLONE_DIR"
 echo "[+] Removing contents of public repository folder"
 find . -maxdepth 1 -not -name ".git" -exec rm -r {} +
@@ -81,6 +72,9 @@ git add .
 
 echo "[+] git status:"
 git status
+
+TAG_VERSION=$(cat composer.json | jq -r '.version')
+TARGET_BRANCH="release/$TAG_VERSION"
 
 echo "[+] git commit:"
 git commit -m "Release v$TAG_VERSION"

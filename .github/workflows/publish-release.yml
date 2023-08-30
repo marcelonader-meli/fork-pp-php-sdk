@@ -27,4 +27,14 @@ jobs:
           GIT_USER_EMAIL: 'marcelo.nader@mercadolivre.com'
           DESTINATION_REPOSITORY_USERNAME: 'mnader_meli'
           DESTINATION_REPOSITORY_NAME: 'fury_pp-php-sdk'
+          TAG_VERSION: cat composer.json | jq -r '.version'
         run: bin/publish-tag-release.sh
+      
+      - name: Get tag version
+        id: vars
+        run: echo "tag_version=$(cat composer.json | jq -r '.version')" >> $GITHUB_OUTPUT
+
+      - name: Create tag version and push current repo code
+        run: |
+          git tag v${{ steps.vars.outputs.tag_version }} master
+          git push origin v${{ steps.vars.outputs.tag_version }}

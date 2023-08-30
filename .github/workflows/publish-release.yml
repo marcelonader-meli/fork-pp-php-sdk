@@ -20,6 +20,16 @@ jobs:
           coverage: none
           tools: composer, cs2pr
 
+                
+      - name: Get tag version
+        id: vars
+        run: echo "tag_version=$(cat composer.json | jq -r '.version')" >> $GITHUB_OUTPUT
+
+      - name: Create tag version and push current repo code
+        run: |
+          git tag v${{ steps.vars.outputs.tag_version }} master
+          git push origin v${{ steps.vars.outputs.tag_version }}
+          
       - name: publish-tag-release
         env:
           SSH_SDK_DEPLOY_KEY_TEST: ${{ secrets.SSH_SDK_DEPLOY_KEY_TEST }}
@@ -29,12 +39,3 @@ jobs:
           DESTINATION_REPOSITORY_NAME: 'fury_pp-php-sdk'
           TAG_VERSION: cat composer.json | jq -r '.version'
         run: bin/publish-tag-release.sh
-      
-      - name: Get tag version
-        id: vars
-        run: echo "tag_version=$(cat composer.json | jq -r '.version')" >> $GITHUB_OUTPUT
-
-      - name: Create tag version and push current repo code
-        run: |
-          git tag v${{ steps.vars.outputs.tag_version }} master
-          git push origin v${{ steps.vars.outputs.tag_version }}
